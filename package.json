@@ -1,0 +1,36 @@
+{
+  "name": "jquery.bootstrap-form-input",
+  "version": "1.0.0",
+  "description": "Adds error statuses and feedback for bootstrap form groups\"",
+  "main": "jquery.bootstrap-form-input.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DubFriend/jquery.boostrap-form-input"
+  },
+  "keywords": [
+    "bootstrap",
+    "form",
+    "input",
+    "jquery",
+    "group",
+    "feedback",
+    "error",
+    "success"
+  ],
+  "author": "Brian Detering",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DubFriend/jquery.boostrap-form-input/issues"
+  },
+  "homepage": "https://github.com/DubFriend/jquery.boostrap-form-input",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-qunit": "^0.7.0",
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}

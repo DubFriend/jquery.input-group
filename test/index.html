@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Repeater</title>
+  <link rel="stylesheet" href="qunit-1.18.0.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+
+
+  <!-- <div class="form-group has-error has-feedback">
+      <label for="foo-bar" class="col-md-4 control-label">
+        bar
+      </label>
+      <div class="col-md-8">
+        <input name="foo"
+               id="foo-bar"
+               type="text"
+              class="form-control"/>
+        <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+        <span class="help-block">b</span>
+      </div>
+    </div> -->
+
+  <script type="text/x-template" id="template">
+    <div data-foo data-input>
+      <label>foo</label>
+      <div><input name="foo"/></div>
+    </div>
+
+    <div data-bar data-input>
+      <span>bar</span>
+      <span>
+        <input name="bar"/>
+        <span><input name="bar"/></span>
+      </span>
+    </div>
+  </script>
+
+  <script src="../lib/jquery-1.11.2.js"></script>
+  <script src="../src/lib.js"></script>
+  <script src="../src/main.js"></script>
+  <script src="qunit-1.18.0.js"></script>
+  <script src="test.js"></script>
+</body>
+</html>
