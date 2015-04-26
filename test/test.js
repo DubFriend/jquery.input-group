@@ -5,6 +5,14 @@ QUnit.module('main', {
         this.$foo = this.$fixture.find('[data-foo]');
         this.$bar = this.$fixture.find('[data-bar]');
         this.$all = this.$fixture.find('[data-input]');
+        this.$inputTypes = this.$fixture.find('[data-input-types]');
+        this.expectedInputTypeValues = {
+            text: "value",
+            radio: "a",
+            checkbox: ["a"],
+            select: "a",
+            textarea: "value"
+        };
     }
 });
 
@@ -62,6 +70,18 @@ QUnit.test('foo no icon', function (assert) {
     this.$foo.inputGroup({ error: 'message', noIcon: true });
     assert.strictEqual(
         this.$foo.find('[data-input-group-feedback-icon]').length, 0
+    );
+});
+
+QUnit.test('all no icon on foo only', function (assert) {
+    this.$all.inputGroup({ error: 'message', noIcon: ['foo'] });
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback-icon]').length, 0,
+        'foo has no icon'
+    );
+    assert.strictEqual(
+        this.$bar.find('[data-input-group-feedback-icon]').length, 1,
+        'bar does have an icon'
     );
 });
 
@@ -158,4 +178,78 @@ QUnit.test('custom html tags and classes', function (assert) {
             .hasClass('custom-icon'),
         'has custom feedback icon'
     );
+});
+
+QUnit.test('inputGroupClear', function (assert) {
+    this.$all.inputGroup({ error: 'message' });
+    this.$all.inputGroupClear();
+    assert.ok(!this.$all.hasClass('custom-feedback'), 'no custom feedback class');
+    assert.ok(!this.$all.hasClass('custom-error'), 'no custom error class');
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback]').length, 0,
+        'has no custom feedback block'
+    );
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback-icon]').length, 0,
+        'has no custom feedback icon'
+    );
+});
+
+QUnit.test('array of messages', function (assert) {
+    this.$foo.inputGroup({ error: ['a', 'b'] });
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback]').html(),
+        '<ul><li>a</li><li>b</li></ul>',
+        'renders array of messages as unordered list'
+    );
+});
+
+QUnit.test('array of length 1 messages', function (assert) {
+    this.$foo.inputGroup({ error: ['a'] });
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback]').html(),
+        'a',
+        'renders without unordered list'
+    );
+});
+
+QUnit.test('inputGroupValues', function (assert) {
+    assert.deepEqual(
+        this.$inputTypes.inputGroupValues(),
+        this.expectedInputTypeValues
+    );
+});
+
+QUnit.test('validate validates on blur', function (assert) {
+    var $input = this.$foo.find('input');
+
+    this.$foo.inputGroup({
+        validate: function (values) {
+            return { error: 'message' };
+        }
+    });
+
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback]').length, 0,
+        'no feedback initially rendered'
+    );
+
+    $input.blur();
+
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback]').length, 1,
+        'feedback on blur'
+    );
+});
+
+QUnit.test('validate passes values', function (assert) {
+    var done = assert.async();
+    var self = this;
+    this.$inputTypes.inputGroup({
+        validate: function (values) {
+            assert.deepEqual(values, self.expectedInputTypeValues);
+            done();
+        }
+    });
+    this.$inputTypes.find('textarea').blur();
 });

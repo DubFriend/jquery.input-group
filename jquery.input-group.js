@@ -1,3 +1,10 @@
+// jquery.input-group version 1.1.0
+// https://github.com/DubFriend/jquery.input-group
+// (MIT) 25-04-2015
+// Brian Detering
+(function ($) {
+'use strict';
+
 var isObject = function (value) {
     return Object.prototype.toString.call(value) === '[object Object]';
 };
@@ -184,3 +191,5 @@ $.fn.inputGroupClear = function () {
 		$groupInput.find('[data-input-group-feedback]').remove();
 	});
 };
+
+}(jQuery));
