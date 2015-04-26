@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head;
+    any other head content must come *after* these tags -->
+
+  <title>jquery.repeater example</title>
+
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>jquery.repeater</h1>
+
+    <form class="form-horizontal">
+      <legend>Example</legend>
+      <div class="form-group foo">
+        <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-10">
+          <input type="text"
+                 name="email"
+                 class="form-control"
+                 id="inputEmail3"
+                 placeholder="Email">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+        <div class="col-sm-10">
+          <input type="password"
+                 name="password"
+                 class="form-control"
+                 id="inputPassword3"
+                 placeholder="Password">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputPassword3" class="col-sm-2 control-label">Confirm Password</label>
+        <div class="col-sm-10">
+          <input type="password"
+                 name="passwordConfirm"
+                 class="form-control"
+                 id="inputPassword3"
+                 placeholder="Confirm Password">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <div class="checkbox">
+            <label>
+              <input name="terms" type="checkbox"> Agree to Terms
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default">Sign in</button>
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="jquery.input-group.js"></script>
+  <script>
+  jQuery(function ($) {
+    'use strict';
+
+    var $formGroupByInputName = function (name) {
+      return $('[name="' + name + '"]').closest('.form-group');
+    };
+
+    $formGroupByInputName('email').inputGroup({
+      validate: function (values) {
+        if(!values.email) {
+          return { error: 'required.' };
+        }
+        else if(!/\S+@\S+\.\S+/.test(values.email)) {
+          return { warning: 'may not be a valid email address' };
+        }
+        else {
+          return { success: null };
+        }
+      }
+    });
+
+    $formGroupByInputName('password').inputGroup({
+      validate: function (values) {
+        if(!values.password) {
+          return { error: 'required.' };
+        }
+        else if(values.password.length < 5) {
+          return { warning: 'Longer Password Suggessted' };
+        }
+        else {
+          return { success: null };
+        }
+      }
+    });
+
+    $formGroupByInputName('passwordConfirm').inputGroup({
+      validate: function () {
+        var values = $('.form-group').inputGroupValues();
+        console.log(values);
+        var statuses = {};
+        var errors = [];
+
+        if(!values.passwordConfirm) {
+          errors.push(['required']);
+        }
+
+        if(values.password !== values.passwordConfirm) {
+          errors.push(['Passwords must match']);
+        }
+
+        if(errors.length) {
+          statuses.error = errors;
+        }
+        else {
+          statuses.success = null;
+        }
+
+        return statuses;
+      }
+    });
+
+    $formGroupByInputName('terms').inputGroup({
+      validate: function (values) {
+        if(!values.terms || !values.terms.length) {
+          return { error: 'must agree to terms' };
+        }
+        else {
+          return { success: null };
+        }
+      }
+    });
+  });
+  </script>
+</body>
+</html>

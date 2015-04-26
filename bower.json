@@ -1,0 +1,34 @@
+{
+  "name": "jquery.input-group",
+  "main": "jquery.input-group.js",
+  "version": "1.1.0",
+  "homepage": "https://github.com/DubFriend/jquery.input-group",
+  "description": "Adds validation and statuses to structured form groups, compatible with Bootstrap form groups",
+  "keywords": [
+    "form",
+    "input",
+    "group",
+    "jquery",
+    "bootstrap",
+    "feedback",
+    "error",
+    "validation"
+  ],
+  "authors": [
+    "Brian Detering"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.3"
+  },
+  "devDependencies": {
+    "qunit": "~1.18.0"
+  }
+}

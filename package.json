@@ -1,7 +1,7 @@
 {
   "name": "jquery.input-group",
   "version": "1.1.0",
-  "description": "Adds error statuses and feedback for bootstrap form groups\"",
+  "description": "Adds validation and statuses to structured form groups, compatible with Bootstrap form groups",
   "main": "jquery.input-group.js",
   "scripts": {
     "test": "grunt test"

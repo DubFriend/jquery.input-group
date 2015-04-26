@@ -20,7 +20,7 @@ var buildStatusTests = function (assert, $elem, statusType, fig) {
     var $inputGroup = $elem.children().last();
     $elem.inputGroup(fig);
     assert.ok($elem.hasClass('has-feedback'), 'has feedback class');
-    assert.ok($elem.hasClass('has-' + statusType), 'has error class');
+    assert.ok($elem.hasClass('has-' + statusType), 'has ' + statusType + ' class');
     assert.strictEqual(
         $inputGroup.find('[data-input-group-feedback-icon]').length, 1,
         'has feedback icon'
@@ -72,6 +72,38 @@ QUnit.test('foo no icon', function (assert) {
         this.$foo.find('[data-input-group-feedback-icon]').length, 0
     );
 });
+
+
+
+QUnit.test('foo error status falsey has no feedback message', function (assert) {
+    this.$foo.inputGroup({ error: '' });
+    assert.ok(this.$foo.hasClass('has-feedback'), 'has feedback class');
+    assert.ok(this.$foo.hasClass('has-error'), 'has error class');
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback-icon]').length, 1,
+        'has feedback icon'
+    );
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback]').length, 0,
+        'does not have feedback element'
+    );
+});
+
+QUnit.test('foo error status empty array has no feedback message', function (assert) {
+    this.$foo.inputGroup({ error: [] });
+    assert.ok(this.$foo.hasClass('has-feedback'), 'has feedback class');
+    assert.ok(this.$foo.hasClass('has-error'), 'has error class');
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback-icon]').length, 1,
+        'has feedback icon'
+    );
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback]').length, 0,
+        'does not have feedback element'
+    );
+});
+
+
 
 QUnit.test('all no icon on foo only', function (assert) {
     this.$all.inputGroup({ error: 'message', noIcon: ['foo'] });

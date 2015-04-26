@@ -1,6 +1,6 @@
 // jquery.input-group version 1.1.0
 // https://github.com/DubFriend/jquery.input-group
-// (MIT) 25-04-2015
+// (MIT) 26-04-2015
 // Brian Detering
 (function ($) {
 'use strict';
@@ -72,12 +72,17 @@ var setGroup = function ($self, statusType, fig) {
 				return message[0];
 			}
 			else if(isArray(message)) {
-				return '<ul>' + reduce(
-					message,
-					function (carry, val) {
-						return carry + '<li>' + val + '</li>';
-					}, ''
-				) + '</ul>';
+				if(message.length) {
+					return '<ul>' + reduce(
+						message,
+						function (carry, val) {
+							return carry + '<li>' + val + '</li>';
+						}, ''
+					) + '</ul>';
+				}
+				else {
+					return '';
+				}
 			}
 			else {
 				return message;
@@ -100,11 +105,13 @@ var setGroup = function ($self, statusType, fig) {
 				);
 			}
 
-			$groupInput.append(
-				$(feedback[statusType])
-					.attr('data-input-group-feedback', '')
-					.html(message)
-			);
+			if(message) {
+				$groupInput.append(
+					$(feedback[statusType])
+						.attr('data-input-group-feedback', '')
+						.html(message)
+				);
+			}
 		}
 	});
 };
@@ -112,15 +119,15 @@ var setGroup = function ($self, statusType, fig) {
 var applyStatuses = function ($self, fig) {
 	$self.inputGroupClear();
 	if(fig) {
-		if(fig.error) {
+		if(fig.error !== undefined) {
 			setGroup($self, 'error', $.extend(fig, { message: fig.error }));
 		}
 
-		if(fig.success) {
+		if(fig.success !== undefined) {
 			setGroup($self, 'success', $.extend(fig, { message: fig.success }));
 		}
 
-		if(fig.warning) {
+		if(fig.warning !== undefined) {
 			setGroup($self, 'warning', $.extend(fig, { message: fig.warning }));
 		}
 	}
