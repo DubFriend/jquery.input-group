@@ -73,10 +73,22 @@ QUnit.test('foo no icon', function (assert) {
     );
 });
 
-
-
 QUnit.test('foo error status falsey has no feedback message', function (assert) {
     this.$foo.inputGroup({ error: '' });
+    assert.ok(this.$foo.hasClass('has-feedback'), 'has feedback class');
+    assert.ok(this.$foo.hasClass('has-error'), 'has error class');
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback-icon]').length, 1,
+        'has feedback icon'
+    );
+    assert.strictEqual(
+        this.$foo.find('[data-input-group-feedback]').length, 0,
+        'does not have feedback element'
+    );
+});
+
+QUnit.test('foo error status named falsey has no feedback message', function (assert) {
+    this.$foo.inputGroup({ error: { foo: null } });
     assert.ok(this.$foo.hasClass('has-feedback'), 'has feedback class');
     assert.ok(this.$foo.hasClass('has-error'), 'has error class');
     assert.strictEqual(
@@ -102,8 +114,6 @@ QUnit.test('foo error status empty array has no feedback message', function (ass
         'does not have feedback element'
     );
 });
-
-
 
 QUnit.test('all no icon on foo only', function (assert) {
     this.$all.inputGroup({ error: 'message', noIcon: ['foo'] });
@@ -159,11 +169,7 @@ QUnit.test('all multi message only on foo', function (assert) {
     );
 });
 
-QUnit.test('all multi statuses', function (assert) {
-    this.$all.inputGroup({
-        error: { foo: 'foo message' },
-        success: { bar: 'bar message' }
-    });
+var testMultiStatuses = function (assert) {
     assert.ok(this.$foo.hasClass('has-feedback'), 'foo has feedback class');
     assert.ok(this.$foo.hasClass('has-error'), 'foo has error class');
     assert.ok(!this.$foo.hasClass('has-success'), 'foo does not have error class');
@@ -180,6 +186,22 @@ QUnit.test('all multi statuses', function (assert) {
         'bar message',
         'bar gets correct message'
     );
+};
+
+QUnit.test('all multi statuses', function (assert) {
+    this.$all.inputGroup({
+        error: { foo: 'foo message' },
+        success: { bar: 'bar message' }
+    });
+    testMultiStatuses.call(this, assert);
+});
+
+QUnit.test('all multi statuses grouped by input names', function (assert) {
+    this.$all.inputGroup({
+        foo: { error: 'foo message' },
+        bar: { success: 'bar message' }
+    });
+    testMultiStatuses.call(this, assert);
 });
 
 QUnit.test('custom html tags and classes', function (assert) {
@@ -280,6 +302,18 @@ QUnit.test('validate passes values', function (assert) {
     this.$inputTypes.inputGroup({
         validate: function (values) {
             assert.deepEqual(values, self.expectedInputTypeValues);
+            done();
+        }
+    });
+    this.$inputTypes.find('textarea').blur();
+});
+
+QUnit.test('validate passes blurred element', function (assert) {
+    var done = assert.async();
+    var self = this;
+    this.$inputTypes.inputGroup({
+        validate: function (values, $blurredElem) {
+            assert.strictEqual($blurredElem.attr('name'), 'textarea');
             done();
         }
     });

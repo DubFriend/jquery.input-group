@@ -1,4 +1,4 @@
-// jquery.input-group version 1.1.0
+// jquery.input-group version 1.1.1
 // https://github.com/DubFriend/jquery.input-group
 // (MIT) 26-04-2015
 // Brian Detering
@@ -23,6 +23,14 @@ var foreach = function (collection, callback) {
             callback(collection[i], i, collection);
         }
     }
+};
+
+var keys = function (collection) {
+	var keys = [];
+	foreach(collection, function (val, key) {
+		keys.push(key);
+	});
+	return keys;
 };
 
 var reduce = function (collection, callback, carry) {
@@ -90,7 +98,7 @@ var setGroup = function ($self, statusType, fig) {
 		}());
 
 		if(
-			isObject(fig.message) && fig.message[inputName] ||
+			isObject(fig.message) && fig.message[inputName] !== undefined ||
 			!isObject(fig.message)
 		) {
 			$group.addClass(classes.feedback + ' ' + classes[statusType]);
@@ -118,17 +126,49 @@ var setGroup = function ($self, statusType, fig) {
 
 var applyStatuses = function ($self, fig) {
 	$self.inputGroupClear();
+
+	var statuses;
+
 	if(fig) {
-		if(fig.error !== undefined) {
-			setGroup($self, 'error', $.extend(fig, { message: fig.error }));
+		statuses = (function normalizeIfFigGroupedByInputNames () {
+			var figKeys = keys(fig);
+			var nameKeys = keys($self.inputGroupValues());
+			var isGroupedByInputNames = false;
+			foreach(figKeys, function (figKey) {
+				if(inArray(nameKeys, figKey)) {
+					isGroupedByInputNames = true;
+				}
+			});
+
+			var normalizedFig = {};
+
+			if(isGroupedByInputNames) {
+				foreach(fig, function (inputFig, inputName) {
+					foreach(inputFig, function (feedback, statusType) {
+						if(!normalizedFig[statusType]) {
+							normalizedFig[statusType] = {};
+						}
+						normalizedFig[statusType][inputName] = feedback;
+					});
+				});
+				return normalizedFig;
+			}
+			else {
+				return fig;
+			}
+		}());
+
+
+		if(statuses.error !== undefined) {
+			setGroup($self, 'error', $.extend(statuses, { message: statuses.error }));
 		}
 
-		if(fig.success !== undefined) {
-			setGroup($self, 'success', $.extend(fig, { message: fig.success }));
+		if(statuses.success !== undefined) {
+			setGroup($self, 'success', $.extend(statuses, { message: statuses.success }));
 		}
 
-		if(fig.warning !== undefined) {
-			setGroup($self, 'warning', $.extend(fig, { message: fig.warning }));
+		if(statuses.warning !== undefined) {
+			setGroup($self, 'warning', $.extend(statuses, { message: statuses.warning }));
 		}
 	}
 };
@@ -182,7 +222,7 @@ $.fn.inputGroup = function (fig) {
 	applyStatuses($self, fig);
 	if(fig.validate) {
 		$self.find('input, select, textarea').blur(function () {
-			applyStatuses($self, fig.validate($self.inputGroupValues()));
+			applyStatuses($self, fig.validate($self.inputGroupValues(), $(this)));
 		});
 	}
 };

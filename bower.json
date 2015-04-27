@@ -1,7 +1,7 @@
 {
   "name": "jquery.input-group",
   "main": "jquery.input-group.js",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage": "https://github.com/DubFriend/jquery.input-group",
   "description": "Adds validation and statuses to structured form groups, compatible with Bootstrap form groups",
   "keywords": [

@@ -78,72 +78,75 @@
   jQuery(function ($) {
     'use strict';
 
-    var $formGroupByInputName = function (name) {
-      return $('[name="' + name + '"]').closest('.form-group');
-    };
+    $('.form-group').inputGroup({
+      validate: function (values, $blurredElem) {
+        var validators = {
+          email: function () {
+            if(!values.email) {
+              return { error: 'required.' };
+            }
+            else if(!/\S+@\S+\.\S+/.test(values.email)) {
+              return { warning: 'may not be a valid email address' };
+            }
+            else {
+              return { success: null };
+            }
+          },
+          password: function () {
+            if(!values.password) {
+              return { error: 'required.' };
+            }
+            else if(values.password.length < 5) {
+              return { warning: 'Longer Password Suggessted' };
+            }
+            else {
+              return { success: null };
+            }
+          },
+          passwordConfirm: function () {
+            var statuses = {};
+            var errors = [];
 
-    $formGroupByInputName('email').inputGroup({
-      validate: function (values) {
-        if(!values.email) {
-          return { error: 'required.' };
-        }
-        else if(!/\S+@\S+\.\S+/.test(values.email)) {
-          return { warning: 'may not be a valid email address' };
-        }
-        else {
-          return { success: null };
-        }
-      }
-    });
+            if(!values.passwordConfirm) {
+              errors.push(['required']);
+            }
 
-    $formGroupByInputName('password').inputGroup({
-      validate: function (values) {
-        if(!values.password) {
-          return { error: 'required.' };
-        }
-        else if(values.password.length < 5) {
-          return { warning: 'Longer Password Suggessted' };
-        }
-        else {
-          return { success: null };
-        }
-      }
-    });
+            if(values.password !== values.passwordConfirm) {
+              errors.push(['Passwords must match']);
+            }
 
-    $formGroupByInputName('passwordConfirm').inputGroup({
-      validate: function () {
-        var values = $('.form-group').inputGroupValues();
-        console.log(values);
+            if(errors.length) {
+              statuses.error = errors;
+            }
+            else {
+              statuses.success = null;
+            }
+
+            return statuses;
+          },
+          terms: function () {
+            if(!values.terms || !values.terms.length) {
+              return { error: 'must agree to terms' };
+            }
+            else {
+              return { success: null };
+            }
+          }
+        };
+
+        var blurredInputName = $blurredElem.attr('name');
+        var validateOrder = ['email', 'password', 'passwordConfirm', 'terms'];
+        var validateOrderIndex = validateOrder.indexOf(blurredInputName);
         var statuses = {};
-        var errors = [];
+        var i;
 
-        if(!values.passwordConfirm) {
-          errors.push(['required']);
-        }
-
-        if(values.password !== values.passwordConfirm) {
-          errors.push(['Passwords must match']);
-        }
-
-        if(errors.length) {
-          statuses.error = errors;
-        }
-        else {
-          statuses.success = null;
+        if(validateOrderIndex !== -1) {
+          for(i = 0; i <= validateOrderIndex; i += 1) {
+            statuses[validateOrder[i]] = validators[validateOrder[i]]();
+          }
         }
 
         return statuses;
-      }
-    });
-
-    $formGroupByInputName('terms').inputGroup({
-      validate: function (values) {
-        if(!values.terms || !values.terms.length) {
-          return { error: 'must agree to terms' };
-        }
-        else {
-          return { success: null };
-        }
       }
     });
   });
