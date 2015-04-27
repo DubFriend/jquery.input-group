@@ -19,7 +19,7 @@ jquery.input-group needs a certain html structure minimally as follows
 ```
 
 jquery.input-group adds feedback classes and messages to this structure.
-```
+```xml
 <group class="feedback-class feedback-type-class">
     <inputGroup>
         <input/>
