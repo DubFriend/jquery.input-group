@@ -29,7 +29,7 @@ jquery.input-group adds feedback classes and messages to this structure.
 </group>
 ```
 
-Within this basic outline jquery.input-group aims to be as flexible as possible
+Within this basic outline jquery.input-group aims to be as flexible as possible,
 allowing a wide range of structures, and is designed to work with Bootstrap
 form groups
 

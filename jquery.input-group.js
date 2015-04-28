@@ -1,6 +1,6 @@
 // jquery.input-group version 1.1.1
 // https://github.com/DubFriend/jquery.input-group
-// (MIT) 26-04-2015
+// (MIT) 27-04-2015
 // Brian Detering
 (function ($) {
 'use strict';
@@ -127,37 +127,29 @@ var setGroup = function ($self, statusType, fig) {
 var applyStatuses = function ($self, fig) {
 	$self.inputGroupClear();
 
-	var statuses;
+	var statuses = {};
+	var figKeys;
+	var nameKeys;
 
 	if(fig) {
-		statuses = (function normalizeIfFigGroupedByInputNames () {
-			var figKeys = keys(fig);
-			var nameKeys = keys($self.inputGroupValues());
-			var isGroupedByInputNames = false;
-			foreach(figKeys, function (figKey) {
-				if(inArray(nameKeys, figKey)) {
-					isGroupedByInputNames = true;
-				}
-			});
+		nameKeys = keys($self.inputGroupValues());
 
-			var normalizedFig = {};
-
-			if(isGroupedByInputNames) {
-				foreach(fig, function (inputFig, inputName) {
-					foreach(inputFig, function (feedback, statusType) {
-						if(!normalizedFig[statusType]) {
-							normalizedFig[statusType] = {};
-						}
-						normalizedFig[statusType][inputName] = feedback;
-					});
+		foreach(fig, function (val, key) {
+			if(inArray(nameKeys, key)) {
+				foreach(val, function (feedback, statusType) {
+					if(!statuses[statusType]) {
+						statuses[statusType] = {};
+					}
+					statuses[statusType][key] = feedback;
 				});
-				return normalizedFig;
 			}
 			else {
-				return fig;
+				if(!statuses[key]) {
+					statuses[key] = {};
+				}
+				statuses[key] = val;
 			}
-		}());
-
+		});
 
 		if(statuses.error !== undefined) {
 			setGroup($self, 'error', $.extend(statuses, { message: statuses.error }));

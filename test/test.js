@@ -204,6 +204,14 @@ QUnit.test('all multi statuses grouped by input names', function (assert) {
     testMultiStatuses.call(this, assert);
 });
 
+QUnit.test('all multi statuses mixed grouping', function (assert) {
+    this.$all.inputGroup({
+        foo: { error: 'foo message' },
+        success: { bar: 'bar message' }
+    });
+    testMultiStatuses.call(this, assert);
+});
+
 QUnit.test('custom html tags and classes', function (assert) {
     $.inputGroupConfig({
         classes: {
