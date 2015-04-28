@@ -1,4 +1,4 @@
-// jquery.input-group version 1.1.1
+// jquery.input-group version 1.1.2
 // https://github.com/DubFriend/jquery.input-group
 // (MIT) 27-04-2015
 // Brian Detering
