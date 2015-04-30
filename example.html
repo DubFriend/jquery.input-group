@@ -79,8 +79,8 @@
     'use strict';
 
     $('.form-group').inputGroup({
-      validate: function (values, $blurredElem) {
-        var validators = {
+      progressiveValidate: function (values, $blurredElem) {
+         var validators = {
           email: function () {
             if(!values.email) {
               return { error: 'required.' };
@@ -134,16 +134,10 @@
           }
         };
 
-        var blurredInputName = $blurredElem.attr('name');
-        var validateOrder = ['email', 'password', 'passwordConfirm', 'terms'];
-        var validateOrderIndex = validateOrder.indexOf(blurredInputName);
         var statuses = {};
-        var i;
-
-        if(validateOrderIndex !== -1) {
-          for(i = 0; i <= validateOrderIndex; i += 1) {
-            statuses[validateOrder[i]] = validators[validateOrder[i]]();
-          }
+        var name;
+        for(name in validators) {
+          statuses[name] = validators[name]();
         }
 
         return statuses;

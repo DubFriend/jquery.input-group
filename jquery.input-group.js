@@ -1,6 +1,6 @@
-// jquery.input-group version 1.1.2
+// jquery.input-group version 1.2.0
 // https://github.com/DubFriend/jquery.input-group
-// (MIT) 27-04-2015
+// (MIT) 30-04-2015
 // Brian Detering
 (function ($) {
 'use strict';
@@ -209,14 +209,50 @@ $.fn.inputGroupValues = function () {
 	return values;
 };
 
-$.fn.inputGroup = function (fig) {
-	var $self = $(this);
-	applyStatuses($self, fig);
-	if(fig.validate) {
+var applyValidate = function ($self, fig) {
+	if(fig && fig.validate) {
 		$self.find('input, select, textarea').blur(function () {
-			applyStatuses($self, fig.validate($self.inputGroupValues(), $(this)));
+			applyStatuses(
+				$self,
+				fig.validate($self.inputGroupValues(), $(this))
+			);
 		});
 	}
+};
+
+var applyProgressiveValidate = function ($self, fig) {
+	if(fig && fig.progressiveValidate) {
+		$self.find('input, select, textarea').blur(function () {
+			var blurredInputName = $(this).attr('name');
+			var blurredInputIndex = (function () {
+				var foundIndex = -1;
+				$self.each(function (index) {
+					if($(this).find('[name]').attr('name') === blurredInputName) {
+						foundIndex = index;
+					}
+				});
+				return foundIndex;
+			}());
+
+			var $inputsToValidate = $self.filter(function (index) {
+				return index <= blurredInputIndex;
+			});
+
+			applyStatuses(
+				$inputsToValidate,
+				fig.progressiveValidate(
+					$self.inputGroupValues(),
+					$(this)
+				)
+			);
+		});
+	}
+};
+
+$.fn.inputGroup = function (fig) {
+	applyStatuses($(this), fig);
+	applyValidate($(this), fig);
+	applyProgressiveValidate($(this), fig);
 };
 
 $.fn.inputGroupClear = function () {

@@ -327,3 +327,31 @@ QUnit.test('validate passes blurred element', function (assert) {
     });
     this.$inputTypes.find('textarea').blur();
 });
+
+QUnit.test('progressiveValidate', function (assert) {
+    var self = this;
+    var hasFeedback = function (inputName) {
+    return self.$inputTypes
+            .find('[name="'+inputName+'"]')
+            .closest('[data-input-types]')
+            .find('[data-input-group-feedback]').length ? true : false;
+    };
+
+    this.$inputTypes.inputGroup({
+        progressiveValidate: function (values, $blurredElem) {
+            return {
+                error: {
+                    text: 'text error',
+                    radio: 'radio error',
+                    checkbox: 'checkbox error'
+                }
+            };
+        }
+    });
+
+    this.$inputTypes.find('[name="radio"]').blur();
+
+    assert.ok(hasFeedback('text'), 'text has feedback');
+    assert.ok(hasFeedback('radio'), 'radio has feedback');
+    assert.ok(!hasFeedback('checkbox'), 'checkbox does not have feedback');
+});

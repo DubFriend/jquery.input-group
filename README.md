@@ -132,6 +132,24 @@ $('.form-group').inputGroup({
 });
 ```
 
+`inputGroup also takes a `progressiveValidate` callaback that will apply statuses
+on input blur.  Statuses will be applied progessively as a user works their way
+through a form.  Inputs that occur after the blurred input will not be validated.
+```javascript
+$('.form-group').inputGroup({
+    progressiveValidate: function (values, $blurredElement) {
+        //progressiveValidate should return a status object following the same format
+        //detailed in the preceeding examples.
+        if(!values.foo) {
+            return { error: { foo: 'required' } };
+        }
+        else {
+            return { success: { foo: null } };
+        }
+    }
+});
+```
+
 ##inputGroupClear
 clears the select input groups of statuses
 ```javascript
