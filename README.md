@@ -115,6 +115,7 @@ $('.several-form-groups').inputGroup({
 });
 ```
 
+###validate
 `inputGroup` also takes a `validate` callback that will apply statuses on input
 blur
 ```javascript
@@ -131,7 +132,7 @@ $('.form-group').inputGroup({
     }
 });
 ```
-
+###progressiveValidate
 `inputGroup also takes a `progressiveValidate` callaback that will apply statuses
 on input blur.  Statuses will be applied progessively as a user works their way
 through a form.  Inputs that occur after the blurred input will not be validated.
