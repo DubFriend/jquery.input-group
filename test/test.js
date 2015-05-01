@@ -1,5 +1,7 @@
 QUnit.module('main', {
     setup: function () {
+        var self = this;
+
         this.$fixture = $('#qunit-fixture');
         this.$fixture.html($('#template').html());
         this.$foo = this.$fixture.find('[data-foo]');
@@ -12,6 +14,12 @@ QUnit.module('main', {
             checkbox: ["a"],
             select: "a",
             textarea: "value"
+        };
+
+        this.findInputGroupByInputName = function (inputName) {
+            return self.$fixture
+                .find('[name="'+inputName+'"]')
+                .closest('[data-input-types],[data-input]');
         };
     }
 });
@@ -331,9 +339,7 @@ QUnit.test('validate passes blurred element', function (assert) {
 QUnit.test('progressiveValidate', function (assert) {
     var self = this;
     var hasFeedback = function (inputName) {
-    return self.$inputTypes
-            .find('[name="'+inputName+'"]')
-            .closest('[data-input-types]')
+        return self.findInputGroupByInputName(inputName)
             .find('[data-input-group-feedback]').length ? true : false;
     };
 
@@ -354,4 +360,28 @@ QUnit.test('progressiveValidate', function (assert) {
     assert.ok(hasFeedback('text'), 'text has feedback');
     assert.ok(hasFeedback('radio'), 'radio has feedback');
     assert.ok(!hasFeedback('checkbox'), 'checkbox does not have feedback');
+});
+
+QUnit.test('no icon progressiveValidate', function (assert) {
+    var self = this;
+    var hasIcon = function (inputName) {
+        return self.findInputGroupByInputName(inputName)
+            .find('[data-input-group-feedback-icon]').length ? true : false;
+    };
+
+    this.$inputTypes.inputGroup({
+        noIcon: ['text'],
+        progressiveValidate: function (values, $blurredElem) {
+            return {
+                error: {
+                    text: 'text error',
+                    radio: 'radio error',
+                    checkbox: 'checkbox error'
+                }
+            };
+        }
+    });
+    this.findInputGroupByInputName('checkbox').find('input').blur();
+    assert.ok(!hasIcon('text'), 'text input does not have icon');
+    assert.ok(hasIcon('radio'), 'radio input has icon');
 });

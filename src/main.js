@@ -233,9 +233,12 @@ var applyProgressiveValidate = function ($self, fig) {
 
 			applyStatuses(
 				$inputsToValidate,
-				fig.progressiveValidate(
-					$self.inputGroupValues(),
-					$(this)
+				$.extend(
+					fig.progressiveValidate(
+						$self.inputGroupValues(),
+						$(this)
+					),
+					{ noIcon: fig.noIcon }
 				)
 			);
 		});

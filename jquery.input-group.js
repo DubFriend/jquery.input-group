@@ -1,6 +1,6 @@
-// jquery.input-group version 1.2.0
+// jquery.input-group version 1.2.1
 // https://github.com/DubFriend/jquery.input-group
-// (MIT) 30-04-2015
+// (MIT) 01-05-2015
 // Brian Detering
 (function ($) {
 'use strict';
@@ -240,9 +240,12 @@ var applyProgressiveValidate = function ($self, fig) {
 
 			applyStatuses(
 				$inputsToValidate,
-				fig.progressiveValidate(
-					$self.inputGroupValues(),
-					$(this)
+				$.extend(
+					fig.progressiveValidate(
+						$self.inputGroupValues(),
+						$(this)
+					),
+					{ noIcon: fig.noIcon }
 				)
 			);
 		});
