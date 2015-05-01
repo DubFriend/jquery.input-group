@@ -3,6 +3,8 @@
 Adds validation and statuses to structured form groups, compatible with
 Bootstrap form inputs.
 
+###[Demo](http://briandetering.net/input-group)
+
 install with bower
 `bower install jquery.input-group`
 
