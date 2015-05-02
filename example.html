@@ -16,9 +16,143 @@
   <div class="container">
     <h1>jquery.input-group</h1>
 
-    <form class="form-horizontal">
-      <legend>Example</legend>
-      <div class="form-group foo">
+    <br/><br/>
+
+
+    <form class="form-horizontal" data-set-feedback>
+      <legend>Set Feedback</legend>
+<pre>
+$('form-group').inputGroup({
+  error: 'error message'
+});
+
+$('form-group').inputGroup({
+  success: 'success message'
+});
+
+$('form-group').inputGroup({
+  warning: 'warning message';
+});
+</pre>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Input</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-success">Set Success</button>
+      <button type="button" class="btn btn-warning">Set Warning</button>
+      <button type="button" class="btn btn-danger">Set Error</button>
+    </form>
+
+    <br/><br/>
+
+    <form class="form-horizontal" data-no-icon>
+      <legend>Disable Icon</legend>
+<pre>
+$('form-group').inputGroup({
+  noIcon: true,
+  success: 'success message'
+});
+</pre>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Input</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+    </form>
+
+
+    <br/><br/>
+
+    <form class="form-horizontal" data-no-feedback-message>
+      <legend>Set Status without feedback message</legend>
+<pre>
+$('form-group').inputGroup({
+  success: null
+});
+</pre>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Input</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+    </form>
+
+    <br/><br/>
+
+    <form class="form-horizontal" data-multiple-inputs>
+      <legend>Set Multiple Inputs at once by Input Name</legend>
+<pre>
+$('multiple-form-groups').inputGroup({
+  noIcon: ['inputA'],
+  warning: {
+    inputA: 'warning message'
+  },
+  success: {
+    inputB: null
+  }
+});
+</pre>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Input A</label>
+        <div class="col-sm-10">
+          <input name="inputA" type="text" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Input B</label>
+        <div class="col-sm-10">
+          <input name="inputB" type="text" class="form-control">
+        </div>
+      </div>
+    </form>
+
+    <br/><br/>
+
+
+    <form class="form-horizontal" data-validate>
+      <legend>Set a Validate Function to be called on input blur</legend>
+<pre>
+$('form-group').inputGroup({
+  validate: function (inputValues, $blurredElem) {
+    return { error: 'error message' };
+  }
+});
+</pre>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Input</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+    </form>
+
+    <br/><br/>
+
+
+    <form class="form-horizontal" data-progressive-validate>
+      <legend>Progressive Validate</legend>
+      <p>Try working your way through the form by intentionally creating errors</p>
+<pre>
+$('multiple-form-groups').inputGroup({
+  progessiveValidate: function (inputValues, $blurredElement) {
+    return {
+      error: {
+        email: 'email error',
+        password: 'password error',
+        passwordConfirm: 'passwordConfirm error'
+      }
+    };
+  }
+});
+</pre>
+      <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
         <div class="col-sm-10">
           <input type="text"
@@ -60,12 +194,6 @@
           </div>
         </div>
       </div>
-
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-default">Sign in</button>
-        </div>
-      </div>
     </form>
 
 
@@ -78,7 +206,52 @@
   jQuery(function ($) {
     'use strict';
 
-    $('.form-group').inputGroup({
+    var $setFeedback = $('[data-set-feedback]');
+    var $setFeedbackInputGroup = $setFeedback.find('.form-group');
+    $setFeedback.find('.btn-success').click(function () {
+      $setFeedbackInputGroup.inputGroup({
+        success: 'success message'
+      });
+    });
+
+    $setFeedback.find('.btn-warning').click(function () {
+      $setFeedbackInputGroup.inputGroup({
+        warning: 'warning message'
+      });
+    });
+
+    $setFeedback.find('.btn-danger').click(function () {
+      $setFeedbackInputGroup.inputGroup({
+        error: 'error message'
+      });
+    });
+
+    $('[data-no-icon]').find('.form-group').inputGroup({
+      noIcon: true,
+      success: 'success message'
+    });
+
+    $('[data-no-feedback-message]').find('.form-group').inputGroup({
+      success: null
+    });
+
+    $('[data-multiple-inputs]').find('.form-group').inputGroup({
+      noIcon: ['inputA'],
+      warning: {
+        inputA: 'warning message'
+      },
+      success: {
+        inputB: null
+      }
+    });
+
+    $('[data-validate]').find('.form-group').inputGroup({
+      validate: function (inputValues, $blurredElem) {
+        return { error: 'error message' };
+      }
+    });
+
+    $('[data-progressive-validate]').find('.form-group').inputGroup({
       progressiveValidate: function (values, $blurredElem) {
          var validators = {
           email: function () {
@@ -145,5 +318,6 @@
     });
   });
   </script>
+  <script src="//localhost:35729/livereload.js"></script>
 </body>
 </html>

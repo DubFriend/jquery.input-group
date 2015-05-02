@@ -40,7 +40,10 @@ module.exports = function (grunt) {
             scripts: {
                 files: ['**/*'],
                 tasks: devTaskList,
-                options: { spawn: true }
+                options: {
+                    livereload: true,
+                    spawn: true
+                }
             }
         }
 
